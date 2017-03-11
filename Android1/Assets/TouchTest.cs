@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TouchTest : MonoBehaviour {
+    Ray ray;
+    RaycastHit hit;
 
 	// Use this for initialization
 	void Start () {
@@ -11,20 +13,20 @@ public class TouchTest : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.touchCount > 0) {
-            // test touch controls
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
+        ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+        if (Physics.Raycast(ray, Mathf.Infinity))
+        {
+            Debug.Log("Hit something");
+        }
+            ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            Debug.DrawRay(ray.origin, ray.direction*20, Color.red);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
-                Debug.Log("Touch Began");
-            }
-            if (Input.GetTouch(0).phase == TouchPhase.Moved)
-            {
-                Debug.Log("Touch Moved");
-            }
-            if (Input.GetTouch(0).phase == TouchPhase.Ended)
-            {
-                Debug.Log("Touch Ended");
+                Debug.Log("Hit something");
+
+                Destroy(hit.transform.gameObject);
             }
         }
-	}
+    }
 }
